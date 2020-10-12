@@ -16,6 +16,12 @@
 
 package bulk
 
+/*
+#cgo LDFLAGS: /usr/local/lib/libjemalloc.a -L/usr/local/lib -Wl,-rpath,/usr/local/lib -ljemalloc -lm -lstdc++ -pthread -ldl
+#include <stdlib.h>
+#include <jemalloc/jemalloc.h>
+*/
+import "C"
 import (
 	"bufio"
 	"bytes"
@@ -59,6 +65,15 @@ func (r *reducer) run() error {
 	dirs := readShardDirs(filepath.Join(r.opt.TmpDir, reduceShardDir))
 	x.AssertTrue(len(dirs) == r.opt.ReduceShards)
 	x.AssertTrue(len(r.opt.shardOutputDirs) == r.opt.ReduceShards)
+
+	go func() {
+		t := time.NewTicker(time.Minute)
+		opts := C.CString("prof.dump")
+		for {
+			<-t.C
+			C.je_mallctl(opts, nil, nil, nil, 0)
+		}
+	}()
 
 	thr := y.NewThrottle(r.opt.NumReducers)
 	for i := 0; i < r.opt.ReduceShards; i++ {
