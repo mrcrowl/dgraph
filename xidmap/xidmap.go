@@ -27,6 +27,7 @@ import (
 	"google.golang.org/grpc"
 
 	"github.com/dgraph-io/badger/v2"
+	"github.com/dgraph-io/badger/v2/skl"
 	"github.com/dgraph-io/dgraph/protos/pb"
 	"github.com/dgraph-io/dgraph/x"
 	"github.com/dgraph-io/ristretto/z"
@@ -50,7 +51,7 @@ type shard struct {
 	sync.RWMutex
 	block
 
-	trie *Trie
+	trie *skl.SkiplistMmap
 }
 
 type block struct {
@@ -80,7 +81,7 @@ func New(zero *grpc.ClientConn, db *badger.DB) *XidMap {
 	}
 	for i := range xm.shards {
 		xm.shards[i] = &shard{
-			trie: NewTrie(),
+			trie: skl.NewSkiplistMmap(int64(2 << 30)),
 		}
 	}
 	if db != nil {
@@ -252,7 +253,7 @@ func (m *XidMap) AllocateUid() uint64 {
 // Flush must be called if DB is provided to XidMap.
 func (m *XidMap) Flush() error {
 	for _, shard := range m.shards {
-		shard.trie.Release()
+		shard.trie.DecrRef()
 	}
 	if m.writer == nil {
 		return nil

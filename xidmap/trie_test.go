@@ -20,7 +20,7 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/dustin/go-humanize"
+	"github.com/dgraph-io/badger/v2/skl"
 	"github.com/stretchr/testify/require"
 )
 
@@ -63,9 +63,33 @@ func BenchmarkWordsTrie(b *testing.B) {
 		word := string(buf)
 		trie.Put(word, uid)
 	}
-	b.Logf("Words: %d. Allocator: %s. Per word: %d\n", uid,
-		humanize.IBytes(uint64(trie.Size())),
-		uint64(trie.Size())/uid)
+	//	b.Logf("Words: %d. Allocator: %s. Per word: %d\n", uid,
+	//		humanize.IBytes(uint64(trie.Size())),
+	//		uint64(trie.Size())/uid)
+	b.StopTimer()
+}
+
+// $ go test -bench=BenchmarkWordsTrie --run=XXX -benchmem -memprofile mem.out
+// $ go tool pprof mem.out
+func BenchmarkWordsSkiplist(b *testing.B) {
+	buf := make([]byte, 32)
+
+	size := 2 << 30
+	trie := skl.NewSkiplistMmap(int64(size))
+	defer trie.DecrRef()
+
+	var uid uint64
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		rand.Read(buf)
+		uid++
+		word := string(buf)
+		trie.Put(word, uid)
+	}
+	//  b.Logf("Words: %d. Allocator: %s. Per word: %d\n", uid,
+	//    humanize.IBytes(uint64(trie.Size())),
+	//    uint64(trie.Size())/uid)
 	b.StopTimer()
 }
 

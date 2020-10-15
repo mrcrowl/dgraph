@@ -1,0 +1,50 @@
+Using z.Allocator with starting ref: 3d9e000000000000
+[Decoder]: Using assembly version of decoder
+goos: linux
+goarch: amd64
+pkg: github.com/dgraph-io/dgraph/xidmap
+BenchmarkWordsTrie
+BenchmarkWordsTrie-8       	  931270	      2310 ns/op
+BenchmarkWordsTrie-8       	  916998	      2296 ns/op
+BenchmarkWordsTrie-8       	  903627	      2290 ns/op
+BenchmarkWordsTrie-8       	  933418	      2295 ns/op
+BenchmarkWordsTrie-8       	  940441	      2282 ns/op
+BenchmarkWordsSkiplist
+BenchmarkWordsSkiplist-8   	 1000000	      2024 ns/op
+BenchmarkWordsSkiplist-8   	 1000000	      2037 ns/op
+BenchmarkWordsSkiplist-8   	 1000000	      2052 ns/op
+BenchmarkWordsSkiplist-8   	 1000000	      2049 ns/op
+BenchmarkWordsSkiplist-8   	 1000000	      2005 ns/op
+BenchmarkWordsMap
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 1
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 100
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 10000
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 1000000
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 2440171
+BenchmarkWordsMap-8        	 2440171	       499 ns/op
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 1
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 100
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 10000
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 1000000
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 2213966
+BenchmarkWordsMap-8        	 2213966	       505 ns/op
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 1
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 100
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 10000
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 1000000
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 2549586
+BenchmarkWordsMap-8        	 2549586	       425 ns/op
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 1
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 100
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 10000
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 1000000
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 2661973
+BenchmarkWordsMap-8        	 2661973	       416 ns/op
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 1
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 100
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 10000
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 1000000
+    BenchmarkWordsMap: trie_test.go:113: Number of words added: 2682408
+BenchmarkWordsMap-8        	 2682408	       414 ns/op
+PASS
+ok  	github.com/dgraph-io/dgraph/xidmap	29.664s
