@@ -125,22 +125,6 @@ func writeUIDFunc(b *strings.Builder, uids []uint64, args []gql.Arg) {
 //
 // Only uid(0x123, 0x124) and type(...) functions are supported at root.
 func writeRoot(b *strings.Builder, q *gql.GraphQuery) {
-	if q.Func == nil {
-		return
-	}
-
-	switch {
-	case q.Func.Name == "uid":
-		x.Check2(b.WriteString("(func: "))
-		writeUIDFunc(b, q.Func.UID, q.Func.Args)
-	case q.Func.Name == "type" && len(q.Func.Args) == 1:
-		x.Check2(b.WriteString(fmt.Sprintf("(func: type(%s)", q.Func.Args[0].Value)))
-	case q.Func.Name == "eq" && len(q.Func.Args) == 2:
-		x.Check2(b.WriteString(fmt.Sprintf("(func: eq(%s, %s)", q.Func.Args[0].Value,
-			q.Func.Args[1].Value)))
-	}
-	writeOrderAndPage(b, q, true)
-	x.Check2(b.WriteRune(')'))
 }
 
 func writeFilterArguments(b *strings.Builder, args []gql.Arg) {
