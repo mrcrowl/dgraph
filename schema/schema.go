@@ -234,8 +234,9 @@ func (s *state) GetType(typeName string) (pb.TypeUpdate, bool) {
 	typ, has := s.types[typeName]
 	if !has {
 		return pb.TypeUpdate{}, false
+	} else {
+		return *typ, true
 	}
-	return *typ, true
 }
 
 // TypeOf returns the schema type of predicate
@@ -244,8 +245,9 @@ func (s *state) TypeOf(pred string) (types.TypeID, error) {
 	defer s.RUnlock()
 	if schema, ok := s.predicate[pred]; ok {
 		return types.TypeID(schema.ValueType), nil
+	} else {
+		return types.UndefinedID, errors.Errorf("Schema not defined for predicate: %v.", pred)
 	}
-	return types.UndefinedID, errors.Errorf("Schema not defined for predicate: %v.", pred)
 }
 
 // IsIndexed returns whether the predicate is indexed or not
@@ -262,9 +264,9 @@ func (s *state) IsIndexed(ctx context.Context, pred string) bool {
 
 	if schema, ok := s.predicate[pred]; ok {
 		return len(schema.Tokenizer) > 0
+	} else {
+		return false
 	}
-
-	return false
 }
 
 // Predicates returns the list of predicates for given group
@@ -372,8 +374,9 @@ func (s *state) HasCount(ctx context.Context, pred string) bool {
 	}
 	if schema, ok := s.predicate[pred]; ok {
 		return schema.Count
+	} else {
+		return false
 	}
-	return false
 }
 
 // IsList returns whether the predicate is of list type.
@@ -391,8 +394,9 @@ func (s *state) HasUpsert(pred string) bool {
 	defer s.RUnlock()
 	if schema, ok := s.predicate[pred]; ok {
 		return schema.Upsert
+	} else {
+		return false
 	}
-	return false
 }
 
 func (s *state) HasLang(pred string) bool {
@@ -400,8 +404,9 @@ func (s *state) HasLang(pred string) bool {
 	defer s.RUnlock()
 	if schema, ok := s.predicate[pred]; ok {
 		return schema.Lang
+	} else {
+		return false
 	}
-	return false
 }
 
 func (s *state) HasNoConflict(pred string) bool {
@@ -457,8 +462,9 @@ func Load(predicate string) error {
 func LoadFromDb() error {
 	if err := LoadSchemaFromDb(); err != nil {
 		return err
+	} else {
+		return LoadTypesFromDb()
 	}
-	return LoadTypesFromDb()
 }
 
 // LoadSchemaFromDb iterates through the DB and loads all the stored schema updates.
