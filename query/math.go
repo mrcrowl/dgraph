@@ -36,10 +36,10 @@ func processBinary(mNode *mathTree) error {
 	destMap := make(map[uint64]types.Val)
 	aggName := mNode.Fn
 
-	mpl := mNode.Child[0].Val
 	mpr := mNode.Child[1].Val
-	cl := mNode.Child[0].Const
+	mpl := mNode.Child[0].Val
 	cr := mNode.Child[1].Const
+	cl := mNode.Child[0].Const
 
 	f := func(k uint64) error {
 		ag := aggregator{
@@ -263,5 +263,5 @@ func evalMathTree(mNode *mathTree) error {
 		return processTernary(mNode)
 	}
 
-	return errors.Errorf("Unhandled Math operator: %v", aggName)
+	return errors.Errorf("Unhandled Mathematics operator: %v", aggName)
 }
